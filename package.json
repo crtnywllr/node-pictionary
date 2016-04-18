@@ -1,0 +1,29 @@
+{
+  "name": "node-pictionary",
+  "version": "1.0.0",
+  "description": "Learning socket.io with pictionary",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crtnywllr/node-pictionary.git"
+  },
+  "keywords": [
+    "Socket",
+    "pictionary",
+    "canvas"
+  ],
+  "author": "Courtney Waller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crtnywllr/node-pictionary/issues"
+  },
+  "homepage": "https://github.com/crtnywllr/node-pictionary#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
+  }
+}

@@ -32,6 +32,7 @@ var pictionary = function() {
         }
     });
 };
+
 socket.on('draw', pictionary);
 
 $(document).ready(function() {

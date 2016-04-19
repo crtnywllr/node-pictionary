@@ -5,8 +5,7 @@ var pictionary = function() {
 
     var draw = function(position) {
         context.beginPath();
-        context.arc(position.x, position.y,
-            6, 0, 2 * Math.PI);
+        context.arc(position.x, position.y, 6, 0, 2 * Math.PI);
         context.fill();
     };
 
@@ -16,9 +15,11 @@ var pictionary = function() {
     canvas[0].height = canvas[0].offsetHeight;
     canvas.on('mousedown', function(){
         drawing = true;
+        console.log(drawing);
     });
      canvas.on('mouseup', function(){
         drawing = false;
+        console.log(drawing);
     })
     canvas.on('mousemove', function(event) {
         var offset = canvas.offset();
@@ -29,11 +30,13 @@ var pictionary = function() {
         if (drawing) {
         draw(position);
         socket.emit('draw', position);
+        // this is the event that listens for other drawers
         }
     });
+    socket.on('draw', draw); 
 };
 
-socket.on('draw', pictionary);
+
 
 $(document).ready(function() {
     pictionary();

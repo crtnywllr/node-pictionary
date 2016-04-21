@@ -1,8 +1,11 @@
 var socket = io();
 
+
 var pictionary = function() {
     var canvas, context, drawing, guessBox;
+    var username = prompt('What\'s your name?') || "Guest";
 
+//Drawing 
     var draw = function(position) {
         context.beginPath();
         context.arc(position.x, position.y, 6, 0, 2 * Math.PI);
@@ -33,23 +36,28 @@ var pictionary = function() {
     });
     socket.on('draw', draw);
 
-    //Guesses
-    var onKeyDown = function(event) {
+//Guesses
+    // Show guess history
+    var addGuess = function(guess) {
+        $('#guesses').append('<div>' + guess + '</div>');
+    };
+    //Capture guess input, return input
+    guessBox = $('#guess input');
+    guessBox.on('keydown', function(event) {
         if (event.keyCode != 13) {
             return;
         }
-        socket.emit('guess', guessBox.val());
+        
+        var guess = username + ": " + guessBox.val();
+        console.log(guess);
+        addGuess(guess);
+        socket.emit('guess', guess);
         guessBox.val('');
-    };
-    guessBox = $('#guess input');
-    guessBox.on('keydown', onKeyDown);
+    });
 
-    // Add the guesses to the UI of each user
-    var addGuess = function(guess) {
-        $('#guesses').text(guess);
-    };
 
-    socket.on('guess', addGuess);
+socket.on('guess', addGuess);
+    //socket.on('addUser', addUser);
 };
        
 

@@ -20,7 +20,7 @@ io.on('connect', function(socket) {
     });
     
     socket.on('guess', function(guessBox){
-        io.emit('guess', guessBox);
+        socket.broadcast.emit('guess', guessBox);
     })
     var clients = io.sockets.clients();
     // console.log('clients: ',clients.adapter.rooms);

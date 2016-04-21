@@ -18,19 +18,16 @@ io.on('connect', function(socket) {
     socket.on('draw', function(position) {
         socket.broadcast.emit('draw', position);
     });
-<<<<<<< HEAD
     
     socket.on('guess', function(guessBox){
         io.emit('guess', guessBox);
     })
-=======
     var clients = io.sockets.clients();
     // console.log('clients: ',clients.adapter.rooms);
-    console.log(socket.nsp.sockets);
+   // console.log(socket.nsp.sockets);
     socket.on('game start', function(){
         
     });
->>>>>>> eb566b7a527992ca559f49d3199bed2bb818cb7c
 });
 
 server.listen(8080);

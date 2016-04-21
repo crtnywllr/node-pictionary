@@ -15,19 +15,9 @@ var pictionary = function() {
     canvas[0].height = canvas[0].offsetHeight;
     canvas.on('mousedown', function() {
         drawing = true;
-<<<<<<< HEAD
-        //console.log(drawing);
-=======
-        console.log(drawing);
->>>>>>> eb566b7a527992ca559f49d3199bed2bb818cb7c
     });
     canvas.on('mouseup', function() {
         drawing = false;
-<<<<<<< HEAD
-        //console.log(drawing);
-=======
-        console.log(drawing);
->>>>>>> eb566b7a527992ca559f49d3199bed2bb818cb7c
     })
     canvas.on('mousemove', function(event) {
         var offset = canvas.offset();
@@ -36,7 +26,6 @@ var pictionary = function() {
             y: event.pageY - offset.top
         };
         if (drawing) {
-<<<<<<< HEAD
             draw(position);
             socket.emit('draw', position);
             // this is the event that listens for other drawers
@@ -62,20 +51,7 @@ var pictionary = function() {
 
     socket.on('guess', addGuess);
 };
-
-
-
-=======
-        draw(position);
-        socket.emit('draw', position);
-        // this is the event that listens for other drawers
-        }
-    });
-    socket.on('draw', draw); 
-};
-
-
->>>>>>> eb566b7a527992ca559f49d3199bed2bb818cb7c
+       
 
 $(document).ready(function() {
     pictionary();

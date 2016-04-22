@@ -49,15 +49,34 @@ var pictionary = function() {
         }
         
         var guess = username + ": " + guessBox.val();
-        console.log(guess);
         addGuess(guess);
         socket.emit('guess', guess);
         guessBox.val('');
     });
 
-
 socket.on('guess', addGuess);
-    //socket.on('addUser', addUser);
+
+//Add users
+var addUser = function(username) {
+           $('#users').append('<div>' + username + '</div>');
+  
+};
+
+addUser(username);
+socket.emit('addUser', username);
+
+
+//Update userlist after disconnect
+   var updateUsers = function(users) {
+    $('#users').empty();
+    users.forEach(function(username){
+        addUser(username);
+        socket.emit('updateUsers', users);
+    });
+   };
+
+socket.on('addUser', addUser);
+socket.on('updateUsers', updateUsers);
 };
        
 

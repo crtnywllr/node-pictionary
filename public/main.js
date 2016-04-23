@@ -2,8 +2,48 @@ var socket = io();
 
 
 var pictionary = function() {
-    var canvas, context, drawing, guessBox;
+    var canvas, context, drawing, drawer, guessBox;
     var username = prompt('What\'s your name?') || "Guest";
+    
+    //Add users
+var addUser = function(username) {
+    $('#users').append('<div><button>' + username + '</button></div>');
+};
+
+addUser(username);
+socket.emit('addUser', username);
+
+
+//Update userlist after disconnect
+   var updateUsers = function(users) {
+    $('#users').empty();
+    users.forEach(function(username){
+        addUser(username);
+        socket.emit('updateUsers', users);
+    });
+   };
+
+socket.on('addUser', addUser);
+socket.on('updateUsers', updateUsers);
+
+//Set Drawer    
+var setDrawer = function(user) {
+    if (username == user) {
+    drawer = true;
+} 
+};
+
+socket.on('setDrawer', setDrawer);
+
+//Pick winner
+
+//Update drawer screen
+/*if (drawer) {
+    $('#guess').hide();
+    $('.players').show();
+    $('#wordToDraw').show();
+    $('.clearButton').show();
+}*/
 
 //Drawing 
     var draw = function(position) {
@@ -28,12 +68,18 @@ var pictionary = function() {
             x: event.pageX - offset.left,
             y: event.pageY - offset.top
         };
-        if (drawing) {
+        if (drawing && drawer) {
             draw(position);
             socket.emit('draw', position);
             // this is the event that listens for other drawers
         }
     });
+    
+   $('#clear').on('click', function() {
+       console.log("I have been clicked");
+        context.clearRect(0, 0, canvas[0].width, canvas[0].height);
+      });
+      
     socket.on('draw', draw);
 
 //Guesses
@@ -55,28 +101,6 @@ var pictionary = function() {
     });
 
 socket.on('guess', addGuess);
-
-//Add users
-var addUser = function(username) {
-           $('#users').append('<div>' + username + '</div>');
-  
-};
-
-addUser(username);
-socket.emit('addUser', username);
-
-
-//Update userlist after disconnect
-   var updateUsers = function(users) {
-    $('#users').empty();
-    users.forEach(function(username){
-        addUser(username);
-        socket.emit('updateUsers', users);
-    });
-   };
-
-socket.on('addUser', addUser);
-socket.on('updateUsers', updateUsers);
 };
        
 

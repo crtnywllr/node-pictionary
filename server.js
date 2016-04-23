@@ -10,11 +10,8 @@ var io = socket_io(server);
 var users = [];
 
 io.on('connect', function(socket) {
-    console.log('Client connected');
-    
-    
-    socket.isDrawing = false;
-    // console.log(socket);
+   // console.log('Client connected');
+  
     
     socket.on('draw', function(position) {
         socket.broadcast.emit('draw', position);
@@ -27,19 +24,25 @@ io.on('connect', function(socket) {
     socket.on('addUser', function(username){
        socket.username = username;
         users.push(username);
+       // console.log(users[0]);
         //console.log(users);
        socket.broadcast.emit('addUser', username); 
+       io.emit('setDrawer', users[0]);
     });
     
     socket.on('disconnect', function() {
         users = users.filter(function(user, index){
             return user !== socket.username;
         });
-        
+        //console.log(users[0]);
         //console.log(users);
         socket.broadcast.emit('updateUsers', users);
-        
       });
+     
+   
+     //io.emit('setDrawer', users[0]);
+     //console.log(users[0]);
+      
 });
 
 server.listen(8080);

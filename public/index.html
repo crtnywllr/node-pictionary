@@ -35,6 +35,12 @@
         display: block;
         margin: 0 auto;
     }
+    
+  /*  .players, 
+    .clearButton, 
+    #wordToDraw {
+    display: none;
+}*/
 </style>
 
 <!-- JS -->
@@ -49,6 +55,9 @@
         <div id="guess">
             Make a guess: <input type="text">
         </div>
+        <div id="wordToDraw">
+            Your word is: <div id=word></div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-3"> Guesses:
@@ -57,9 +66,13 @@
 
         <div class="col-md-6">
             <canvas id="canvas"></canvas>
+            <div id="clearButton">
+      <input type="button" id="clear" value="Clear">
+    </div>
         </div>
         
-        <div class="col-md-3">Players:
+        <div class="col-md-3 players">Players:
+        <h4>Once a correct guess is made, select the winner!</h4>
             <div id="users"></div>
         </div>
 

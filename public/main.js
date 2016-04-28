@@ -1,63 +1,65 @@
+/* global $ */
+/* global io */
 var socket = io();
 
-
 var pictionary = function() {
-    var canvas, context, drawing, drawer, guessBox;
+    var canvas, context, drawing, drawer, guessBox, word, me;
     var username = prompt('What\'s your name?') || "Guest";
-    
-    //Add users
-var addUser = function(username) {
-    $('#users').append('<div><button>' + username + '</button></div>');
-};
 
-addUser(username);
-socket.emit('addUser', username);
-
-
-//Update userlist after disconnect
+    //Update userlist 
    var updateUsers = function(users) {
-    $('#users').empty();
-    users.forEach(function(username){
-        addUser(username);
-        socket.emit('updateUsers', users);
-    });
+        $('#users').empty();
+        users.forEach(function(user){
+            if(user.name != username){
+                 addUser(user);
+            } else {
+                me = user
+            }
+        });
    };
-
-socket.on('addUser', addUser);
-socket.on('updateUsers', updateUsers);
-
-//Set Drawer    
-var setDrawer = function(user) {
-    if (username == user) {
-    drawer = true;
-} 
-};
-
-socket.on('setDrawer', setDrawer);
-
-//Pick winner
-
-//Update drawer screen
-/*if (drawer) {
-    $('#guess').hide();
-    $('.players').show();
-    $('#wordToDraw').show();
-    $('.clearButton').show();
-}*/
-
+    //Add users
+    var addUser = function(user) {
+        var isDrawer = "notDrawing";
+        if(user.drawer){
+            isDrawer = "isDrawing";
+        }
+        $('#users').append('<div><button id="'+ user.id +'" class="'+isDrawer+'">' + user.name + '</button></div>');
+    };
+    $('#users').on('click','button', function() {
+        console.log("Clicked");
+        if (me.drawer){
+            var uName = $(this).text();
+            var uId = $(this).attr('id');
+            
+            // $('#guesses').append(uName + " is the winner! The word was " + word);
+            // setDrawer(uName);
+            clear()
+            socket.emit('pickWinner', uId);
+            console.log('pickWinner', uId);
+        }
+    });
+    
+    var showWinner = function(user){
+        $('#guesses').append(user.name + " is the winner! The word was " + word);
+    }
 //Drawing 
     var draw = function(position) {
         context.beginPath();
         context.arc(position.x, position.y, 6, 0, 2 * Math.PI);
         context.fill();
     };
+    var clear = function(){
+        context.clearRect(0, 0, canvas[0].width, canvas[0].height);
+    }
 
     canvas = $('canvas');
     context = canvas[0].getContext('2d');
     canvas[0].width = canvas[0].offsetWidth;
     canvas[0].height = canvas[0].offsetHeight;
     canvas.on('mousedown', function() {
-        drawing = true;
+        if(me.drawer){
+            drawing = true;
+        }
     });
     canvas.on('mouseup', function() {
         drawing = false;
@@ -68,24 +70,21 @@ socket.on('setDrawer', setDrawer);
             x: event.pageX - offset.left,
             y: event.pageY - offset.top
         };
-        if (drawing && drawer) {
+        if (drawing) {
             draw(position);
             socket.emit('draw', position);
             // this is the event that listens for other drawers
         }
     });
-    
-   $('#clear').on('click', function() {
-       console.log("I have been clicked");
-        context.clearRect(0, 0, canvas[0].width, canvas[0].height);
-      });
-      
-    socket.on('draw', draw);
+        
+//Clearing the canvas    
+   $('#clear').click(clear);
 
 //Guesses
     // Show guess history
     var addGuess = function(guess) {
         $('#guesses').append('<div>' + guess + '</div>');
+        console.log(guess);
     };
     //Capture guess input, return input
     guessBox = $('#guess input');
@@ -94,16 +93,46 @@ socket.on('setDrawer', setDrawer);
             return;
         }
         
-        var guess = username + ": " + guessBox.val();
+        var guess = guessBox.val();
         addGuess(guess);
         socket.emit('guess', guess);
         guessBox.val('');
     });
-
-socket.on('guess', addGuess);
+    
+    socket.emit('addUser', username);
+    socket.on('draw', draw);    
+    socket.on('updateUsers', updateUsers);
+    socket.on('guess', addGuess);
+    socket.on('showWinner',showWinner);
 };
        
 
-$(document).ready(function() {
-    pictionary();
+$(document).ready(pictionary);
+
+//Set Drawer    
+/*var setDrawer = function(user) {
+    if (username == user) {
+    drawer = true;
+    //console.log(username);
+} 
+};
+
+socket.on('setDrawer', setDrawer);
+
+//Pick winner
+$('.nameButton').on('click', function() {
+    console.log("Clicked");
+    var uName = $(this).text();
+    
+    setDrawer(uName);
+    context.clearRect(0, 0, canvas[0].width, canvas[0].height);
+    socket.emit('pickWinner', uName);
+    console.log('pickWinner', uName);
 });
+
+socket.on('pickWinner', setDrawer ); 
+
+//Update drawer screen
+if (drawer) {
+    $('#clear').show();
+}*/

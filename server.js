@@ -14,7 +14,7 @@ var WORDS = [
     "lion", "sock", "number", "person", "pen", "banana", "people",
     "song", "water", "side", "map", "man", "pool table", "woman", "bathroom", "boy",
     "girl", "circus", "cowboy", "roller skates", "laptop", "name", "sentence", "line", "air",
-    "toast", "home", "hand", "house", "picture", "animal", "mother", "father",
+    "toast", "home", "hand", "house", "lobster", "animal", "mother", "father",
     "bicycle", "lightsaber", "world", "head", "page", "airplane", "fishing",
     "exam", "school", "plant", "food", "sun", "dinosaur", "eye", "city", "tree",
     "farm", "book", "sea", "key", "salt and pepper", "bacon", "movie", "south", "east",

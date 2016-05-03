@@ -16,9 +16,9 @@ var pictionary = function() {
             } else {
                 me = user;
                 updatePoints(me.points);
-                if(me.drawer){
-                    setWord(me.word); 
-                    if(me.points > 20 && !incognitoMode){
+                if (me.drawer) {
+                    setWord(me.word);
+                    if (me.points > 30 && !incognitoMode) {
                         incognitoMode = true;
                         $('#incognito').show();
                     }
@@ -31,10 +31,10 @@ var pictionary = function() {
         });
     };
     // update points
-    var updatePoints = function(points){
-        $('#points').text(points);
-    }
-    //Add users
+    var updatePoints = function(points) {
+            $('#points').html("Points: <span class=highlight>" + points + "</span>");
+        }
+        //Add users
     var addUser = function(user) {
         var isDrawer = "notDrawing";
         if (user.drawer) {
@@ -48,17 +48,21 @@ var pictionary = function() {
             var uName = $(this).text();
             var uId = $(this).attr('id');
             clear();
+
             socket.emit('pickWinner', uId);
             socket.emit('clearCanvas')
         }
     });
-//Displaying winner message
+    //Displaying winner message
     var showWinner = function(obj) {
-            $('#guesses').append(obj.newDrawer.name + " is the winner! The word was " + obj.word +'<br/>').show();
-        }
-        
-        //Displaying word to draw
-        var setWord = function(word) {
+        $('#guesses').append(obj.newDrawer.name + " is the winner! The word was " + obj.word + '<br/>').show();
+        setTimeout(function() {
+            $('#guesses').empty();
+        }, 2000);
+    }
+
+    //Displaying word to draw
+    var setWord = function(word) {
             $('#word').text("You are the drawer! Your word is: " + word).show();
             $('#guess').hide();
         }
@@ -91,17 +95,17 @@ var pictionary = function() {
             y: event.pageY - offset.top
         };
         if (drawing) {
-            if (!incognitoMode){
-                draw(position); 
+            if (!incognitoMode) {
+                draw(position);
             }
             socket.emit('draw', position);
             // this is the event that listens for other drawers
         }
     });
     $('#clear').on('click', function() {
-        if(me.drawer){
+        if (me.drawer) {
             clear();
-            socket.emit('clearCanvas')            
+            socket.emit('clearCanvas')
         }
 
     });
@@ -110,8 +114,8 @@ var pictionary = function() {
     //Guesses
     // Show guess history
     var addGuess = function(obj) {
-        $('#guesses').append('<div>' + obj.user + ": " + obj.guess + '</div>');
-        console.log(guess);
+        $('#guesses').append('<div><strong><span class="highlight">' + obj.user + ":</span></strong> " + obj.guess + '</div>');
+        // console.log(obj.user);
     };
     //Capture guess input, return input
     guessBox = $('#guess input');
@@ -121,7 +125,10 @@ var pictionary = function() {
         }
 
         var guess = guessBox.val();
-        addGuess({user:'Me',guess:guess});
+        addGuess({
+            user: 'Me',
+            guess: guess
+        });
         socket.emit('guess', guess);
         guessBox.val('');
     });

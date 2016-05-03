@@ -4,44 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <!-- CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" />
-<style>
-    * {
-        box-sizing: border-box;
-    }
-    
-    body {
-        color: #1E2835;
-        background-color: #F8F8F8;
-        font-size: 1.5em;
-    }
-    
-    h1 {
-        background-color: #9ABBFF;
-        margin: 0 0 20px 0;
-        padding: 20px;
-        text-align: center;
-    }
-    
-    #top-message {
-        text-align: center;
-        padding: 10px;
-    }
-    
-    canvas {
-        width: 800px;
-        height: 600px;
-        border: 1px #C7CACD solid;
-        display: block;
-        margin: 0 auto;
-    }
-    
-     
-   /* #clear {
-    display: none;
-}*/
+<link href='https://fonts.googleapis.com/css?family=Arvo|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="style.css" type="text/css" />
 
-</style>
 
 <!-- JS -->
 <script src="//code.jquery.com/jquery-2.1.0.js"></script>
@@ -50,32 +15,43 @@
 <script src="main.js"></script>
 
 <div id="main">
-    <h1>Pictionary</h1>
+    <header>
+        <img src="images/blocks1.gif">
+        <h1>Pictionary</h1>
+        <img src="images/blocks2.png">
+    </header>
+
     <div id="top-message">
         <div id="guess">
-            Make a guess: <input type="text">
+            Make a guess:
+            <input type="text">
         </div>
-        <div id="wordToDraw">
-         <div id="word"></div>
-         <div id='points'>Points: </div>
-         <div id="incognito" style="display:none;">You scored so muchh, now you must draw blind. Users can see what you do, but you can't. HAHA</div>
+        <div id="drawerMsgs">
+            <div id="word"></div>
+
+            <div id="incognito" style="display:none;">Congrats big scorer! You're so skilled that we've upped the ante. Now you must draw blind...users can see what you do, but you can't. Good luck!</div>
         </div>
+        <div id='points'></div>
     </div>
-    <div class="row">
-        <div class="col-md-3"> Guesses:
+    <div class="content">
+        <div class="guessHistory">
+            <p>Guesses:</p>
             <div id="guesses"></div>
         </div>
 
-        <div class="col-md-6">
+        <div class="canvas">
             <canvas id="canvas"></canvas>
             <div id="clearButton">
-      <input type="button" id="clear" value="Clear">
-    </div>
+                <input type="button" id="clear" value="Clear">
+            </div>
         </div>
-        
-        <div class="col-md-3 players">Players:
+
+        <div class=" players">Players:
             <div id="users"></div>
         </div>
 
     </div>
-    </div>
+
+</div>
+<footer>
+    <img src="images/blocks3.png" </footer>

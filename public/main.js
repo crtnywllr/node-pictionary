@@ -7,6 +7,18 @@ var pictionary = function() {
     var incognitoMode = false;
     var username = prompt('What\'s your name?') || "Guest";
 
+ /*Display information modal box */
+    $(".how").click(function () {
+        $(".overlay").fadeIn(1000);
+
+    });
+
+    /* Hide information modal box */
+    $("a.close").click(function () {
+        $(".overlay").fadeOut(1000);
+    });
+
+
     //Update userlist 
     var updateUsers = function(users) {
         $('#users').empty();
@@ -18,16 +30,16 @@ var pictionary = function() {
                 updatePoints(me.points);
                 if (me.drawer) {
                     setWord(me.word);
-                    if (me.points > 30 && !incognitoMode) {
+                    if (me.points > 50) {
                         incognitoMode = true;
                         $('#incognito').show();
                     }
                 } else {
                     $('#word').hide();
                     $('#guess').show();
+                     $('#incognito').hide();
                 }
             }
-            return me;
         });
     };
     // update points
@@ -58,7 +70,7 @@ var pictionary = function() {
         $('#guesses').append(obj.newDrawer.name + " is the winner! The word was " + obj.word + '<br/>').show();
         setTimeout(function() {
             $('#guesses').empty();
-        }, 2000);
+        }, 1500);
     }
 
     //Displaying word to draw

@@ -12,18 +12,18 @@ var lastId = 0
 var drawer = null;
 var WORDS = [
     "lion", "sock", "number", "person", "pen", "banana", "people",
-    "song", "water", "side", "map", "man", "pool table", "woman", "bathroom", "boy",
-    "girl", "circus", "cowboy", "roller skates", "laptop", "name", "sentence", "line", "air",
-    "toast", "home", "hand", "house", "lobster", "animal", "mother", "father",
+    "song", "water", "continent", "map", "man", "pool table", "woman", "bathroom", "boy",
+    "girl", "circus", "cowboy", "roller skates", "laptop", "name", "jail", "toothbrush", "hair",
+    "toast", "wreath", "hand", "house", "lobster", "animal", "trophy", "skis",
     "bicycle", "lightsaber", "world", "head", "page", "airplane", "fishing",
     "exam", "school", "plant", "food", "sun", "dinosaur", "eye", "city", "tree",
-    "farm", "book", "sea", "key", "salt and pepper", "bacon", "movie", "south", "east",
+    "farm", "book", "seashell", "key", "salt and pepper", "bacon", "popcorn", "pillow", "lollipop",
     "couch", "child", "children", "rocket", "paper", "music", "river", "car",
-    "foot", "round", "book", "baseball", "bear", "king", "queen", "curtains",
-    "mountain", "horse", "watch", "color", "face", "wood", "list", "bird",
-    "body", "dog", "family", "worm", "door", "mountain", "wind", "ship", "dart",
+    "foot", "coin", "book", "baseball", "bear", "king", "queen", "curtains",
+    "mountain", "horse", "watch", "color", "face", "wood", "starfish", "bird",
+    "body", "dog", "yoga", "worm", "door", "mountain", "yo-yo", "ship", "dart",
     "rock", "fast food", "fire", "bookshelf", "piece", "pirate", "castle", "teapot",
-    "space"
+    "outer space"
 ];
 
 function wordPicker(wordList) {
@@ -39,36 +39,29 @@ function wordPicker(wordList) {
           points: 0
       }
   usersArray.push(user);
-//   usersIndex[user.id] = user;
   
   if (!drawer) {
     setDrawer(user);
   }
-  
   return user.id;
 }  
 function removeUser(userID) {
-    //console.log("user" + userID);
-   //user = usersArray[user.id - 1];
-     if (userID) {
         var userIndex;
         usersArray.forEach(function(user,index){
             if(user.id == userID){
                 userIndex = index
             }
         });
-    // var userIndex = usersArray.indexOf(username);
     usersArray.splice(userIndex, 1);
+    
     if (drawer.id === userID) {
        var nextUser = usersArray[userIndex];
-    
        if (nextUser) {
           setDrawer(nextUser);
        } else {
           setDrawer(usersArray[0])
        }
      }
-   }
 }
 function setDrawer(user) {
     usersArray = usersArray.map(function(userObj){
@@ -83,10 +76,8 @@ function setDrawer(user) {
     });
   
   drawer = user;
-//  var word = 
 }
 function getDrawerIndex(id){
-    //console.log('id',id)
     var currentDrawerIndex;
     usersArray.forEach(function(user,index){
             if(user.id == id){
@@ -97,12 +88,9 @@ function getDrawerIndex(id){
 }
 
 io.on('connect', function(socket) {
-   // console.log('Client connected');
    socket.on('addUser', function(username) {
         socket.userID = addUser(username); 
-        socket.emit('updateUsers',usersArray)
-        socket.broadcast.emit('updateUsers', usersArray)
-   })
+        io.emit('updateUsers',usersArray)})
     
     socket.on('draw', function(position) {
         socket.broadcast.emit('draw', position);
@@ -119,21 +107,15 @@ io.on('connect', function(socket) {
        var newDrawer = usersArray[getDrawerIndex(uId)]
        newDrawer.points += 10;
        setDrawer(newDrawer);
-       socket.emit('updateUsers',usersArray)
-       socket.broadcast.emit('updateUsers',usersArray)
-       //broadcast the list changed && broadcast the winner
-      socket.emit('showWinner', {newDrawer:newDrawer, word:word});
-      socket.broadcast.emit('showWinner', {newDrawer:newDrawer, word:word});
-   }) 
+       io.emit('updateUsers',usersArray)
+      io.emit('showWinner', {newDrawer:newDrawer, word:word});
+      }) 
    socket.on('clearCanvas', function () {
-             socket.emit('clearCanvas')
-       socket.broadcast.emit('clearCanvas')
+             io.emit('clearCanvas');
    })
    socket.on('disconnect', function(event){
-       // get the info about the socket
         removeUser(socket.userID);
-        socket.emit('updateUsers',usersArray)
-        socket.broadcast.emit('updateUsers', usersArray)
+        io.emit('updateUsers',usersArray)
    })
       
 });

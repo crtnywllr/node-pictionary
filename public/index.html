@@ -19,7 +19,28 @@
         <img src="images/blocks1.gif">
         <h1>Pictionary</h1>
         <img src="images/blocks2.png">
-    </header>
+            </header>
+            
+            <a class="how" href="#">How to Play</a>
+            
+             <!-- Modal Information Box -->
+        <div class="overlay" id="modal">
+            <div class="content">
+                <h3>How to Play</h3>
+                <div>
+                    <p>This is Pictionary - a drawing guessing game. The game goes like this: </p>
+                    <ul>
+                        <li>1. The first user to connect will be set as the <span class="highlight">drawer</span>. Everyone else will be a <em>guesser</em>.</li>
+                        <li>2. The <span class="highlight">drawer</span> will see a word and try to get the guessers to figure out what the word is.</li>
+                        <li>3. Once a user guesses the correct answer, the <span class="highlight">drawer</span> can click on their name to make them the new <span class="highlight">drawer</span>!</li>
+                        <li>4. The <span class="highlight">drawer</span> can clear the canvas at any time if needed.</li>
+                        <li>5. Every time a correct guess is chosen, that user gets 10 points! Once you get 50 points you switch to <strong><em>blindfold mode</em></strong> (you can't see what you draw, but your guessers can!) for extra challenge.</li>
+                    </ul>
+                    <p>Ready to play?</p>
+                    <a class="close" href="#">Got It!</a>
+                </div>
+            </div>
+        </div>
 
     <div id="top-message">
         <div id="guess">
@@ -29,7 +50,7 @@
         <div id="drawerMsgs">
             <div id="word"></div>
 
-            <div id="incognito" style="display:none;">Congrats big scorer! You're so skilled that we've upped the ante. Now you must draw blind...users can see what you do, but you can't. Good luck!</div>
+            <div id="incognito" style="display:none;">Congrats big scorer! You're so skilled that we've upped the ante. Now you must draw blindfolded...users can see what you do, but you can't. Good luck!</div>
         </div>
         <div id='points'></div>
     </div>

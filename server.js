@@ -4,54 +4,59 @@ var socket_io = require('socket.io');
 
 var app = express();
 app.use(express.static('public'));
+
 var server = http.Server(app);
 var io = socket_io(server);
+
 var usersArray = [];
-// var usersIndex = {};
 var lastId = 0
 var drawer = null;
 var WORDS = [
-    "lion", "sock", "number", "person", "pen", "banana", "people",
-    "song", "water", "continent", "map", "man", "pool table", "woman", "bathroom", "boy",
-    "girl", "circus", "cowboy", "roller skates", "laptop", "name", "jail", "toothbrush", "hair",
-    "toast", "wreath", "hand", "house", "lobster", "animal", "trophy", "skis",
-    "bicycle", "lightsaber", "world", "head", "page", "airplane", "fishing",
-    "exam", "school", "plant", "food", "sun", "dinosaur", "eye", "city", "tree",
-    "farm", "book", "seashell", "key", "salt and pepper", "bacon", "popcorn", "pillow", "lollipop",
-    "couch", "child", "children", "rocket", "paper", "music", "river", "car",
-    "foot", "coin", "book", "baseball", "bear", "king", "queen", "curtains",
-    "mountain", "horse", "watch", "color", "face", "wood", "starfish", "bird",
-    "body", "dog", "yoga", "worm", "door", "mountain", "yo-yo", "ship", "dart",
-    "rock", "fast food", "fire", "bookshelf", "piece", "pirate", "castle", "teapot",
-    "outer space"
+    'lion', 'sock', 'number', 'person', 'pen', 'banana', 'people',
+    'song', 'water', 'continent', 'map', 'man', 'pool table', 'woman', 'bathroom', 'boy',
+    'girl', 'circus', 'cowboy', 'roller skates', 'laptop', 'name', 'jail', 'toothbrush', 'hair',
+    'toast', 'wreath', 'hand', 'house', 'lobster', 'animal', 'trophy', 'skis',
+    'bicycle', 'lightsaber', 'world', 'head', 'ponytail', 'airplane', 'fishing',
+    'exam', 'school', 'plant', 'food', 'sun', 'dinosaur', 'eye', 'city', 'tree',
+    'farm', 'book', 'seashell', 'key', 'salt and pepper', 'bacon', 'popcorn', 'pillow', 'lollipop',
+    'couch', 'child', 'children', 'rocket', 'paper', 'music', 'river', 'car',
+    'foot', 'coin', 'book', 'baseball', 'bear', 'king', 'queen', 'curtains',
+    'mountain', 'horse', 'watch', 'color', 'face', 'wood', 'starfish', 'bird',
+    'body', 'dog', 'yoga', 'worm', 'door', 'mountain', 'yo-yo', 'ship', 'dart',
+    'rock', 'fast food', 'fire', 'bookshelf', 'piece', 'pirate', 'castle', 'teapot',
+    'outer space'
 ];
 
 function wordPicker(wordList) {
     return wordList[Math.floor(Math.random()*(wordList.length-1))];
 };
 
-  function addUser(username) {
-      var user = {
-          name: username,
-          id: lastId++,
-          drawer:false,
-          word:null,
-          points: 0
-      }
-  usersArray.push(user);
+function addUser(username) {
+    var user = {
+        name: username,
+        id: lastId++,
+        drawer:false,
+        word:null,
+        points: 0,
+        waiting: true
+    }
+      
+    usersArray.push(user);
   
-  if (!drawer) {
+    if (!drawer) {  
     setDrawer(user);
-  }
+    /*How to make start button appear only for this first person?*/
+    }
   return user.id;
 }  
+
 function removeUser(userID) {
-        var userIndex;
-        usersArray.forEach(function(user,index){
-            if(user.id == userID){
-                userIndex = index
-            }
-        });
+    var userIndex;
+    usersArray.forEach(function(user,index){
+        if(user.id == userID){
+            userIndex = index
+        }
+    });
     usersArray.splice(userIndex, 1);
     
     if (drawer.id === userID) {
@@ -63,10 +68,12 @@ function removeUser(userID) {
        }
      }
 }
+
 function setDrawer(user) {
     usersArray = usersArray.map(function(userObj){
         if(userObj.id == user.id){
            userObj.drawer = true;
+           userObj.waiting = false;
            userObj.word = wordPicker(WORDS);
         } else{
             userObj.drawer = false;
@@ -76,14 +83,15 @@ function setDrawer(user) {
     });
   
   drawer = user;
+  //console.log(drawer);
 }
 function getDrawerIndex(id){
     var currentDrawerIndex;
     usersArray.forEach(function(user,index){
-            if(user.id == id){
-                currentDrawerIndex= index
-            }
-        });
+        if(user.id == id){
+            currentDrawerIndex= index
+        }
+    });
     return currentDrawerIndex
 }
 
@@ -107,11 +115,15 @@ io.on('connect', function(socket) {
        var newDrawer = usersArray[getDrawerIndex(uId)]
        newDrawer.points += 10;
        setDrawer(newDrawer);
-       io.emit('updateUsers',usersArray)
+       usersArray.forEach(function(user,index){
+           user.waiting = false;
+        });
+      io.emit('updateUsers',usersArray)
       io.emit('showWinner', {newDrawer:newDrawer, word:word});
       }) 
+      
    socket.on('clearCanvas', function () {
-             io.emit('clearCanvas');
+        io.emit('clearCanvas');
    })
    socket.on('disconnect', function(event){
         removeUser(socket.userID);
@@ -121,3 +133,21 @@ io.on('connect', function(socket) {
 });
 
 server.listen(process.env.PORT ||8080);
+
+/*Idea for adding timeout to change drawer after inactivity
+
+var idleSeconds = 30;
+
+$(function(){
+  var idleTimer;
+  function resetTimer(){
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(whenUserIdle,idleSeconds*1000);
+  }
+  $(document.body).bind('mousemove,keydown,click',resetTimer);
+  resetTimer(); // Start the timer when the page loads
+});
+
+function whenUserIdle(){
+  //...
+}*/

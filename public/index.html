@@ -1,78 +1,87 @@
 <!doctype html>
 <title>Pictionary</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
 
 <!-- CSS -->
 <link href='https://fonts.googleapis.com/css?family=Arvo|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel='stylesheet' href='style.css' type='text/css' />
 
 
 <!-- JS -->
-<script src="//code.jquery.com/jquery-2.1.0.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="main.js"></script>
+<script src='//code.jquery.com/jquery-2.1.0.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.js'></script>
+<script src='/socket.io/socket.io.js'></script>
+<script src='main.js'></script>
 
-<div id="main">
+<div id='main'>
     <header>
-        <img src="images/blocks1.gif">
+        <img src='images/blocks1.gif'>
         <h1>Pictionary</h1>
-        <img src="images/blocks2.png">
-            </header>
-            
-            <a class="how" href="#">How to Play</a>
-            
-             <!-- Modal Information Box -->
-        <div class="overlay" id="modal">
-            <div class="content">
-                <h3>How to Play</h3>
-                <div>
-                    <p>This is Pictionary - a drawing guessing game. The game goes like this: </p>
-                    <ul>
-                        <li>1. The first user to connect will be set as the <span class="highlight">drawer</span>. Everyone else will be a <em>guesser</em>.</li>
-                        <li>2. The <span class="highlight">drawer</span> will see a word and try to get the guessers to figure out what the word is.</li>
-                        <li>3. Once a user guesses the correct answer, the <span class="highlight">drawer</span> can click on their name to make them the new <span class="highlight">drawer</span>!</li>
-                        <li>4. The <span class="highlight">drawer</span> can clear the canvas at any time if needed.</li>
-                        <li>5. Every time a correct guess is chosen, that user gets 10 points! Once you get 50 points you switch to <strong><em>blindfold mode</em></strong> (you can't see what you draw, but your guessers can!) for extra challenge.</li>
-                    </ul>
-                    <p>Ready to play?</p>
-                    <a class="close" href="#">Got It!</a>
-                </div>
+        <img src='images/blocks2.png'>
+    </header>
+
+    <a class='how' href='#'>How to Play</a>
+
+    <!-- Modal Information Box -->
+    <div class='overlay' id='modal'>
+        <div class='content'>
+            <h3>How to Play</h3>
+            <div>
+                <p>This is Pictionary - a drawing guessing game. The game goes like this: </p>
+                <ul>
+                    <li>1. The first user to connect will be set as the <span class='highlight'>drawer</span>. Everyone else will be a <em>guesser</em>.</li>
+                    <li>2. The <span class='highlight'>drawer</span> will see a word and try to get the guessers to figure out what the word is.</li>
+                    <li>3. Once a user guesses the correct answer, the <span class='highlight'>drawer</span> can click on their name to make them the new <span class='highlight'>drawer</span>!</li>
+                    <li>4. The <span class='highlight'>drawer</span> can clear the canvas at any time if needed.</li>
+                    <li>5. Every time a correct guess is chosen, that user gets 10 points! Once you get 50 points you switch to <strong><em>blindfold mode</em></strong> (you can't see what you draw, but your guessers can!) for extra challenge.</li>
+                </ul>
+                <p>Ready to play?</p>
+                <a class='close highlight' href='#'><strong>Got It!</strong></a>
             </div>
         </div>
+    </div>
 
-    <div id="top-message">
-        <div id="guess">
+    <div id='top-message'>
+        <div id='guess'>
             Make a guess:
-            <input type="text">
+            <input type='text'>
         </div>
-        <div id="drawerMsgs">
-            <div id="word"></div>
-
-            <div id="incognito" style="display:none;">Congrats big scorer! You're so skilled that we've upped the ante. Now you must draw blindfolded...users can see what you do, but you can't. Good luck!</div>
+        <div id='drawerMsgs'>
+            <div id='start' style='display:none;'>
+                <button>Start</button>
+            </div>
+            <div id='word'></div>
+            <div id='incognito' class="highlight" style='display:none;'><strong>Congrats big scorer! You're so skilled that we've upped the ante. Now you must draw blindfolded...users can see what you do, but you can't. Good luck!</strong></div>
         </div>
         <div id='points'></div>
     </div>
-    <div class="content">
-        <div class="guessHistory">
-            <p>Guesses:</p>
-            <div id="guesses"></div>
+    
+    <div id='waitMsg' style='display:none;'>Hang tight! You'll join in on the next round. Meanwhile, here's how you play:
+        <div>
+            <ul>
+                <li>1. The first user to connect will be set as the <span class='highlight'>drawer</span>. Everyone else will be a <em>guesser</em>.</li>
+                <li>2. The <span class='highlight'>drawer</span> will see a word and try to get the guessers to figure out what the word is.</li>
+                <li>3. Once a user guesses the correct answer, the <span class='highlight'>drawer</span> can click on their name to make them the new <span class='highlight'>drawer</span>!</li>
+                <li>4. The <span class='highlight'>drawer</span> can clear the canvas at any time if needed.</li>
+                <li>5. Every time a correct guess is chosen, that user gets 10 points! Once you get 50 points you switch to <strong><em>blindfold mode</em></strong> (you can't see what you draw, but your guessers can!) for extra challenge.</li>
+            </ul>
         </div>
-
-        <div class="canvas">
-            <canvas id="canvas"></canvas>
-            <div id="clearButton">
-                <input type="button" id="clear" value="Clear">
+    </div>
+    
+    <div class='content'>
+        <div class='guessHistory'>
+            <p>Guesses:</p>
+            <div id='guesses'></div>
+        </div>
+        <div class='canvas'>
+            <canvas id='canvas'></canvas>
+            <div id='clearButton'>
+                <input type='button' id='clear' value='Clear'>
             </div>
         </div>
-
-        <div class=" players">Players:
-            <div id="users"></div>
+        <div class='players'>Players:
+            <div id='users'></div>
         </div>
-
     </div>
-
 </div>
-<footer>
-    <img src="images/blocks3.png" </footer>

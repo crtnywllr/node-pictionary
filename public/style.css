@@ -1,99 +1,105 @@
     * {
         box-sizing: border-box;
     }
+    
     body {
-        background-color: #020181;
-        color: #fafafa;
-        font-family: "Open Sans Condensed", sans-serif;
+        color: #020181;
+        font-family: 'Open Sans Condensed', sans-serif;
         font-size: 1.5em;
     }
-    button, 
+    
+    button,
     #clear {
-        border: none;
+        background: #fff;
         font-size: 2rem;
         padding: 1rem;
-        border-radius: 8px;
+        border-radius: 4px;
         color: #020181;
-        font-family: "Arvo", sans-serif;
+        font-family: 'Arvo', sans-serif;
         text-transform: uppercase;
+    }
+    
+    button:hover, 
+    input:hover {
+        cursor: pointer;
     }
     
     .highlight {
-        color: #FFFF00;
+        color: #FF1111;
         font-size: 1.5rem;
     }
-    
-   
     /*Header*/
     
     header {
-        background-color: #027DFE;
+        align-items: center;
+        background-color: #020181;
+        color: #fff;
         display: inline-flex;
         flex-flow: row nowrap;
-        align-items: center;
         justify-content: center;
-        width: 100%;
         margin-bottom: 1rem;
+        width: 100%;
     }
-   header h1 {
+    
+    header h1 {
         font-family: 'Arvo', serif;
-        margin: 0 0 20px 0;
-        padding: 20px;
+        margin: 0 0 20px;
+        padding: 2rem 2rem 1rem;
         text-align: center;
         text-transform: uppercase;
     }
+    
     header img {
         width: 10%;
     }
-    
-    
     /*Main Display*/
+    
     #top-message {
-        margin-bottom: 2rem;
+        border: 1px solid #020181;
+        border-radius: 4px;
+        margin: 0 auto 1rem;
         padding: 1rem;
         text-align: center;
         width: 30%;
-        margin: 0 auto;
     }
-    
     /*Blindfold mode*/
-   #incognito {
-    background-color: #027dfe;
-   border: 5px solid #fafafa;
-    border-radius: 4px;
-    color: #020181;
-    font-weight: 700;
-    margin: 1rem auto;
-    padding: 0.5rem;
-}
     
-    /*Overlay*/
-    .overlay {
-    width: 100%;
-    height: 100%;
-    color: #fafafa;
-    background: #020181;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0;
-    z-index: 1000;
-    display: none;
-}
-
- a {
-        text-decoration: none;
-        color: #fafafa;
-        border: 1px solid #fafafa;
-        border-radius: 4px;
-    padding: 0.5rem;
+    #incognito {
+        margin: 1rem auto;
+        padding: 0.5rem;
     }
-
-.content a {
-    background-color: #027DFE;
-    border: none;
-}
+    /*Overlay*/
     
+    .overlay {
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        background: #020181;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        z-index: 1000;
+        display: none;
+    }
+    
+    .how {
+        background-color: #ffff00;
+        border: 1px solid #020181;
+        border-radius: 4px;
+        color: #020181;
+        margin-right: 2rem;
+        padding: 0.5rem;
+        text-decoration: none;
+    }
+    
+    .close {
+        background-color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 0.5rem;
+        text-decoration: none;
+    }
     /*Setting flex*/
     
     .content {
@@ -101,19 +107,25 @@
         flex-flow: row nowrap;
         justify-content: space-around;
         width: 100%;
-    }
-    .content .guessHistory p {
         text-align: center;
     }
-    .content .players {
-        text-align: right;
+    
+    .content .guessHistory div {
+        text-align: left;
+        margin-left: 2rem;
     }
+    
+    .content .guessHistory {
+        margin-top: -2rem;
+    }
+    
     .content .guessHistory,
     .content .players {
         width: 24%;
         height: 500px;
         overflow: auto;
     }
+    
     .content .canvas {
         width: 50%
     }
@@ -122,10 +134,10 @@
     canvas {
         width: 100%;
         height: 500px;
-        border: 1px #C7CACD solid;
+        border: 10px #020181 solid;
+        border-radius: 4px;
         display: block;
         margin: 0 auto;
-        background-color: #fafafa;
     }
     /*Modify buttons*/
     
@@ -133,21 +145,21 @@
     .notDrawing {
         margin-top: 1rem;
     }
+    
     .isDrawing {
-        background-color: #FFFF00;
+        background-color: #00b700;
+        color: #fff;
     }
+    
     .notDrawing {
-        background-color: #fafafa;
+        border: 2px solid #020181;
     }
+    
     #clearButton {
         width: 20%;
         margin: 1rem auto;
     }
-    #clear {
-        background-color: #fafafa;
-    }
-    /*Footer*/
     
-    footer img {
-        width: 100%;
+    #clear {
+        border: #020181;
     }

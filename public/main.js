@@ -3,10 +3,29 @@
 var socket = io();
 
 var pictionary = function() {
+    //Get word list
+    var getItems = function(){
+        var ajax = $.ajax('/words', {
+        type: 'GET',
+        dataType: 'json'
+    });
+    ajax.done(function(result){
+        result.forEach(function(word){
+           WORDS.push(word.name);  
+        });
+    })
+    ajax.fail(function (jqXHR, error, errorThrown) {
+            console.log(jqXHR);
+            console.log(error);
+            console.log(errorThrown);
+        });
+    }();
+    
     var canvas, context, drawing, drawer, guessBox, word, me;
+    var WORDS = [];
+    console.log(WORDS);
     var incognitoMode = false;
     var username = prompt('What\'s your name?') || 'Guest';
-console.log(username);
     //Display information modal box 
     $('.how').click(function() {
         $('.overlay').fadeIn(1000);
@@ -26,6 +45,8 @@ console.log(username);
                 me = user;
                 updatePoints(me.points);
                 if (me.drawer) {
+                    word = wordPicker(WORDS);
+                    me.word = word;
                     setWord(me.word);
                     if (me.points > 50) {
                         incognitoMode = true;
@@ -84,10 +105,15 @@ console.log(username);
     
     //Displaying winner message
     var showWinner = function(obj) {
-        $('#guesses').append(obj.newDrawer.name + ' is the winner! The word was ' + obj.word + '<br/>').show();
+        $('#guesses').append(obj.newDrawer.name + ' is the winner! The word was ' + word + '<br/>').show();
         setTimeout(function() {
             $('#guesses').empty();
         }, 1500);
+    };
+    
+    //Choosing word for drawer
+    var wordPicker = function(wordList) {
+    return wordList[Math.floor(Math.random()*(wordList.length-1))];
     };
     
     //Displaying word to draw

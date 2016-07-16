@@ -1,0 +1,11 @@
+{
+    "production": {
+        "url": "mongodb://localhost/pictionary"
+    },
+    "test": {
+        "url": "mongodb://localhost/pictionary-test"
+    },
+    "development": {
+        "url": "mongodb://localhost/pictionary-dev"
+    }
+}

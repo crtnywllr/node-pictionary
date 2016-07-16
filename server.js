@@ -1,9 +1,19 @@
+require('./db/connect');
+var seed = require('./db/seed');
 var http = require('http');
 var express = require('express');
+var bodyParser = require('body-parser');
+var wordRoutes = require('./routes/word');
 var socket_io = require('socket.io');
 
 var app = express();
+app.use(bodyParser.json());
 app.use(express.static('public'));
+
+app.use('/', wordRoutes);
+app.use('*', function(req, res) {
+    res.status(404).json({ message: 'Not Found' });
+});
 
 var server = http.Server(app);
 var io = socket_io(server);
@@ -11,25 +21,6 @@ var io = socket_io(server);
 var usersArray = [];
 var lastId = 0
 var drawer = null;
-var WORDS = [
-    'lion', 'sock', 'number', 'person', 'pen', 'banana', 'people',
-    'song', 'water', 'continent', 'map', 'man', 'pool table', 'woman', 'bathroom', 'boy',
-    'girl', 'circus', 'cowboy', 'roller skates', 'laptop', 'name', 'jail', 'toothbrush', 'hair',
-    'toast', 'wreath', 'hand', 'house', 'lobster', 'animal', 'trophy', 'skis',
-    'bicycle', 'lightsaber', 'world', 'head', 'ponytail', 'airplane', 'fishing',
-    'exam', 'school', 'plant', 'food', 'sun', 'dinosaur', 'eye', 'city', 'tree',
-    'farm', 'book', 'seashell', 'key', 'salt and pepper', 'bacon', 'popcorn', 'pillow', 'lollipop',
-    'couch', 'child', 'children', 'rocket', 'paper', 'music', 'river', 'car',
-    'foot', 'coin', 'book', 'baseball', 'bear', 'king', 'queen', 'curtains',
-    'mountain', 'horse', 'watch', 'color', 'face', 'wood', 'starfish', 'bird',
-    'body', 'dog', 'yoga', 'worm', 'door', 'mountain', 'yo-yo', 'ship', 'dart',
-    'rock', 'fast food', 'fire', 'bookshelf', 'piece', 'pirate', 'castle', 'teapot',
-    'outer space'
-];
-
-function wordPicker(wordList) {
-    return wordList[Math.floor(Math.random()*(wordList.length-1))];
-};
 
 function addUser(username) {
     var user = {
@@ -74,7 +65,7 @@ function setDrawer(user) {
         if(userObj.id == user.id){
            userObj.drawer = true;
            userObj.waiting = false;
-           userObj.word = wordPicker(WORDS);
+           //userObj.word = wordPicker(WORDS);
         } else{
             userObj.drawer = false;
             userObj.word = null;
@@ -97,9 +88,8 @@ function getDrawerIndex(id){
 
 io.on('connect', function(socket) {
    socket.on('addUser', function(username) {
-        socket.userID = addUser(username); 
+    socket.userID = addUser(username); 
         io.emit('updateUsers',usersArray)})
-    
     socket.on('draw', function(position) {
         socket.broadcast.emit('draw', position);
     });
@@ -111,7 +101,6 @@ io.on('connect', function(socket) {
   
    socket.on('pickWinner', function(uId) {
        //change the current drawer
-       var word = drawer.word;
        var newDrawer = usersArray[getDrawerIndex(uId)]
        newDrawer.points += 10;
        setDrawer(newDrawer);
@@ -119,7 +108,7 @@ io.on('connect', function(socket) {
            user.waiting = false;
         });
       io.emit('updateUsers',usersArray)
-      io.emit('showWinner', {newDrawer:newDrawer, word:word});
+      io.emit('showWinner', {newDrawer:newDrawer});
       }) 
       
    socket.on('clearCanvas', function () {

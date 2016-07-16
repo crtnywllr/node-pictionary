@@ -31,9 +31,7 @@ function addUser(username) {
         points: 0,
         waiting: true
     }
-      
     usersArray.push(user);
-  
     if (!drawer) {  
     setDrawer(user);
     /*How to make start button appear only for this first person?*/
@@ -65,16 +63,13 @@ function setDrawer(user) {
         if(userObj.id == user.id){
            userObj.drawer = true;
            userObj.waiting = false;
-           //userObj.word = wordPicker(WORDS);
         } else{
             userObj.drawer = false;
-            userObj.word = null;
+            userObj.waiting = false;
         }
         return userObj;
     });
-  
   drawer = user;
-  //console.log(drawer);
 }
 function getDrawerIndex(id){
     var currentDrawerIndex;
@@ -93,12 +88,10 @@ io.on('connect', function(socket) {
     socket.on('draw', function(position) {
         socket.broadcast.emit('draw', position);
     });
-    
     socket.on('guess', function(guessBox){
         var guesserindex = getDrawerIndex(socket.userID);
         socket.broadcast.emit('guess', {user: usersArray[guesserindex].name, guess:guessBox});
-    })
-  
+    });
    socket.on('pickWinner', function(uId) {
        //change the current drawer
        var newDrawer = usersArray[getDrawerIndex(uId)]
@@ -109,16 +102,14 @@ io.on('connect', function(socket) {
         });
       io.emit('updateUsers',usersArray)
       io.emit('showWinner', {newDrawer:newDrawer});
-      }) 
-      
+      });
    socket.on('clearCanvas', function () {
         io.emit('clearCanvas');
    })
    socket.on('disconnect', function(event){
         removeUser(socket.userID);
         io.emit('updateUsers',usersArray)
-   })
-      
+   });
 });
 
 server.listen(process.env.PORT ||8080);
